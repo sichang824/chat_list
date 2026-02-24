@@ -465,11 +465,14 @@ class ChatListState extends State<ChatList> {
   }
 
   _renderList() {
+    final scrollBehavior = widget.scrollBehavior ??
+        ScrollConfiguration.of(context).copyWith(dragDevices: {
+          PointerDeviceKind.touch,
+          PointerDeviceKind.mouse,
+          PointerDeviceKind.trackpad,
+        });
     return ScrollConfiguration(
-      behavior: ScrollConfiguration.of(context).copyWith(dragDevices: {
-        PointerDeviceKind.touch,
-        PointerDeviceKind.mouse,
-      }),
+      behavior: scrollBehavior,
       child: SmartRefresher(
           enablePullDown: widget.hasPrevMsgs,
           enablePullUp: widget.hasMoreMsgs,
