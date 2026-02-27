@@ -161,6 +161,7 @@ class ChatListState extends State<ChatList> {
   _handleLastMessageButton(bool forceToInitToTrue) {
     if (widget.showUnreadMsgButton && lastReadMessageKey != null) {
       WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+        if (!mounted) return;
         latestUnreadMessageIndex = constLargeUnreadIndex;
         var newUnreadMessageIndex = _getLatestUnReadMessageIndex();
         if (newUnreadMessageIndex != null) {
@@ -200,6 +201,7 @@ class ChatListState extends State<ChatList> {
         latestUnreadMessageIndex = null;
 
         SchedulerBinding.instance?.addPostFrameCallback((timeStamp) {
+          if (!mounted) return;
           if (showLastUnreadButton.value != false) {
             showLastUnreadButton.value = false;
           }
@@ -212,6 +214,7 @@ class ChatListState extends State<ChatList> {
     if (widget.showReceivedMsgButton) {
       // Next round to set key
       WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+        if (!mounted) return;
         if (firstKey != null) {
           firstNewMessageKey ??= firstKey;
         }
@@ -261,6 +264,7 @@ class ChatListState extends State<ChatList> {
   }
 
   _determineShowNewMsgCount() {
+    if (!mounted) return;
     if (widget.showReceivedMsgButton && itemPositions.isNotEmpty) {
       if (firstNewMessageIndex == null ||
           itemPositions[0].index <= firstNewMessageIndex!) {
@@ -315,6 +319,7 @@ class ChatListState extends State<ChatList> {
     }
 
     SchedulerBinding.instance?.addPostFrameCallback((timeStamp) {
+      if (!mounted) return;
       isShowMoveToTop.value = showTop;
     });
   }
@@ -325,6 +330,7 @@ class ChatListState extends State<ChatList> {
         (widgetHeight, positions) {
       itemPositions = positions;
       SchedulerBinding.instance?.addPostFrameCallback((timeStamp) {
+        if (!mounted) return;
         _determineShowNewMsgCount();
         _determineShowLatestUnreadMsgButton();
       });
@@ -417,6 +423,7 @@ class ChatListState extends State<ChatList> {
         if (widget.onLoadMsgsByLatestReadMsgKey != null) {
           await widget.onLoadMsgsByLatestReadMsgKey!();
           WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+            if (!mounted) return;
             var newUnreadMessageIndex = _getLatestUnReadMessageIndex();
             if (constLargeUnreadIndex != newUnreadMessageIndex &&
                 newUnreadMessageIndex != null) {
